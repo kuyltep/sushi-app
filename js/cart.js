@@ -11,16 +11,23 @@ window.addEventListener("click", function (event) {
       price: card.querySelector(".price__currency").innerText,
       counter: card.querySelector("[data-counter]").innerText,
     };
-    console.log(productInfo);
-    const cartItemHTML = `
-    <!-- Cart item -->
-							<div class="cart-item" data-id="${productInfo.id}">
-								<div class="cart-item__top">
-									<div class="cart-item__img">
-										<img src="${productInfo.imgSrc}" alt="">
-									</div>
-									<div class="cart-item__desc">
-										<div class="cart-item__title">${productInfo.title}</div>
+    const itemInCart = cartWrapper.querySelector(
+      `[data-id="${productInfo.id}"]`
+    );
+    if (itemInCart) {
+      const counterElement = itemInCart.querySelector("[data-counter]");
+      counterElement.innerText =
+        parseInt(counterElement.innerText) + parseInt(productInfo.counter);
+    } else {
+      const cartItemHTML = `
+			<!-- Cart item -->
+			<div class="cart-item" data-id="${productInfo.id}">
+			<div class="cart-item__top">
+			<div class="cart-item__img">
+			<img src="${productInfo.imgSrc}" alt="">
+			</div>
+			<div class="cart-item__desc">
+			<div class="cart-item__title">${productInfo.title}</div>
 										<div class="cart-item__weight">${productInfo.itemsInBox}. / ${productInfo.weight}.</div>
 
 										<!-- cart-item__details -->
@@ -44,6 +51,10 @@ window.addEventListener("click", function (event) {
 							</div>
     `;
 
-    cartWrapper.insertAdjacentHTML("beforeend", cartItemHTML);
+      cartWrapper.insertAdjacentHTML("beforeend", cartItemHTML);
+    }
+    card.querySelector("[data-counter]").innerText = 1;
   }
+  toggleCartStatus();
+  calcCartPrice();
 });
